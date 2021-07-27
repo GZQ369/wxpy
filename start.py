@@ -2,6 +2,7 @@ import json
 from urllib.request import Request, urlopen
 from twilio.rest import Client
 import time
+import requests
 
 # zb网站获取数据Api
 countryUrl = "https://ieltsindicator.britishcouncil.org/api/availabilities?CountryId="
@@ -18,9 +19,21 @@ maxUseTime = "2022-01-01T07:00:00Z"
 signNum = '+86 159 6804 0165'
 me ='+86 186 1683 2808'
 fromNum ='+14158959062'
-account_sid = "AC4e69a19f4c95be9cb8d55c33bfeebb74"
+account_sid = "AC4e69a19f4c95be9cb45484d55c33bfeebb74"
 # Your Auth Token from twilio.com/console
-auth_token  = "e973cda16890eea937924702958251f3"
+auth_token  = "e973cda16890eea93792474454402958251f3"
+headers = {
+    'Content-Type': "application/json",
+    'User-Agent': "PostmanRuntime/7.15.0",
+    'Accept': "*/*",
+    'Cache-Control': "no-cache",
+    'Postman-Token': "a9477d0f-08ee-4960-b6f8-9fd85dc0d5cc,d376ec80-54e1-450a-8215-952ea91b01dd",
+    'Host': "maker.ifttt.com",
+    'accept-encoding': "gzip, deflate",
+    'content-length': "63",
+    'Connection': "keep-alive",
+    'cache-control': "no-cache"
+    }
 
 def getExamDate(url):
     """
@@ -141,36 +154,55 @@ def sendMessage(country,closeTime,SpeakingCloseTime):
     # print(call.sid)
 # sendMessage(1,2,3)
 # exit()
+
+def send_notice(event_name, key, country,closeTime,SpeakingCloseTime):
+    url = "https://maker.ifttt.com/trigger/"+event_name+"/with/key/"+key+""
+    payload = "{\n    \"value1\": \""+country+" \",\"value2\": \""+closeTime+"\",\"value3\": \""+SpeakingCloseTime+"\"\n}"
+
+    payload2 = "{\n    \"value1\": \""+closeTime+"\"\n}"
+    response = requests.request("POST", url, data=payload.encode('utf-8'), headers=headers)
+    print(response.text)
+ 
+
 def choiceStrategyTestTime():
     """
     选择考试时间的策略，选第一个时间
     :return:
     """
+    userId = input("请输入你的用户名/手机号: ")
+    
+    password = input("请输入你的密码: ")
+    if password != userId[-6:] or len(userId) !=11 :
+        print("密码或用户名输入错误")
+        return
     allCountryid = getAllcountryId()
-    for key,country in allCountryid.items():
-        #选着听读写考试时间
-        print("正在检查能报名的 {}  国家...{}" .format(country,key))
-        module, tests = praseYMDDate(key)
-        if len(tests)==0:
-            time.sleep(0.25)
-            continue
-        else:
-            closeTime,examID = timeCompare(tests)
-
-            #验证这些时间中可以选折使用的speaking考试时间
-            time.sleep(0.012)
-
-            avaibleTests, avaibleCount = praseHMSDate(examID, module)
-            if avaibleCount==0:
-                time.sleep(0.25)
+    i=1
+    while True:
+        print("即将开启第{}轮监测...... " .format(i))
+        for key,country in allCountryid.items():
+            #选着听读写考试时间
+            print("正在检查能报名的 {}  国家...{}" .format(country,key))
+            module, tests = praseYMDDate(key)
+            if len(tests)==0:
+                time.sleep(0.85)
                 continue
             else:
-                SpeakingCloseTime,examID = timeCompare(avaibleTests)
-                print("监测到能报名的{}国家，Listening-Reading-Writing 考试时间{}, speaking 考试时间{}".format(country,closeTime,SpeakingCloseTime))
-                sendMessage( country,closeTime,SpeakingCloseTime )
-                continue
+                closeTime,examID = timeCompare(tests)
 
-# choiceStrategyTestTime()
-# sendMessage(a,s,d)
+                #验证这些时间中可以选折使用的speaking考试时间
+                time.sleep(0.012)
 
+                avaibleTests, avaibleCount = praseHMSDate(examID, module)
+                if avaibleCount==0:
+                    time.sleep(0.25)
+                    continue
+                else:
+                    SpeakingCloseTime,examID = timeCompare(avaibleTests)
+                    print("监测到能报名的{}国家，Listening-Reading-Writing 考试时间{}, speaking 考试时间{}".format(country,closeTime,SpeakingCloseTime))
+                    send_notice('yashi', 'bGxjFVZ5WvKoQUBJnP_zsJ', country,closeTime,SpeakingCloseTime )
+                    continue
+        time.sleep(1.98)
+        i+=1
+
+choiceStrategyTestTime()
 
