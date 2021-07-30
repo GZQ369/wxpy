@@ -175,6 +175,15 @@ def choiceStrategyTestTime():
     if password != userId[-6:] or len(userId) !=11 :
         print("密码或用户名输入错误")
         return
+    
+    dateChoice = input("请输入报名日期(1-31日任一数字日期):")
+    if not dateChoice.isdigit():
+        return
+    dateChoice = int(dateChoice)    
+    if dateChoice > 31 :
+        return
+    
+
     allCountryid = getAllcountryId()
     i=1
     while True:
@@ -189,6 +198,10 @@ def choiceStrategyTestTime():
             else:
                 closeTime,examID = timeCompare(tests)
 
+                choiceDay = int(closeTime[8:10])
+                if choiceDay != dateChoice:
+                    continue
+
                 #验证这些时间中可以选折使用的speaking考试时间
                 time.sleep(0.012)
 
@@ -201,7 +214,7 @@ def choiceStrategyTestTime():
                     print("监测到能报名的{}国家，Listening-Reading-Writing 考试时间{}, speaking 考试时间{}".format(country,closeTime,SpeakingCloseTime))
                     send_notice('yashi', 'bGxjFVZ5WvKoQUBJnP_zsJ', country,closeTime,SpeakingCloseTime )
                     continue
-        time.sleep(1.98)
+        time.sleep(1.28)
         i+=1
 
 choiceStrategyTestTime()
