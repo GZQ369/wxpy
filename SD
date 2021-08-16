@@ -1,0 +1,94 @@
+https://eamidentity.britishcouncil.org/account/login?returnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3Dieltsindicator.b2c.app%26redirect_uri%3Dhttps%253A%252F%252Fieltsindicator.britishcouncil.org%252Fcallback%26response_type%3Dcode%26scope%3Dopenid%2520profile%2520email%2520ieltsindicator.b2c.api%2520registrantid%2520offline_access%26state%3Dc06a3d05096243f4aec72fc22a34b142%26code_challenge%3DzemFTyU4XRC3onKdeYrwJKPUq_74dnUCNBnn3SBp-bk%26code_challenge_method%3DS256%26response_mode%3Dquery
+sername: intilrx@163.com
+Password: Yasi12345678
+ReturnUrl: /connect/authorize/callback?client_id=ieltsindicator.b2c.app&\
+        redirect_uri=https%3A%2F%2Fieltsindicator.britishcouncil.org%2Fcallback&\
+        response_type=code&scope=openid%20profile%20email%20ieltsindicator.b2c.api%20registrantid%20offline_access&\
+        state=c06a3d05096243f4aec72fc22a34b142&\
+        code_challenge=zemFTyU4XRC3onKdeYrwJKPUq_74dnUCNBnn3SBp-bk&\
+        code_challenge_method=S256&response_mode=query
+button: login
+__RequestVerificationToken: CfDJ8HouxCI9N8RPhwSSUoFygRkujxjBgioNf_ueKcbKagGYGUZRkZsuRLCNY9zeoVNe2Mf42meDtA9kY2V4dMkysv1vwrUNQnxxI5w8wKkLmXXpupQOlIQfXCaST5k9XdVgx2FoXpfm3kPvf2QV8TNotxuGsndggUekuSvdcB_cyLpkejXyowE9SKBig-TTSFoMOg
+
+https://eamidentity.britishcouncil.org/account/login?returnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3Dieltsindicator.b2c.app%26redirect_uri%3Dhttps%253A%252F%252Fieltsindicator.britishcouncil.org%252Fcallback%26response_type%3Dcode%26scope%3Dopenid%2520profile%2520email%2520ieltsindicator.b2c.api%2520registrantid%2520offline_access%26state%3Dc06a3d05096243f4aec72fc22a34b142%26code_challenge%3DzemFTyU4XRC3onKdeYrwJKPUq_74dnUCNBnn3SBp-bk%26code_challenge_method%3DS256%26response_mode%3Dquery
+Username: intilrx@163.com
+Password: Yasi12345678
+ReturnUrl: /connect/authorize/callback?client_id=ieltsindicator.b2c.app&\
+        redirect_uri=https%3A%2F%2Fieltsindicator.britishcouncil.org%2Fcallback&\
+        response_type=code&scope=openid%20profile%20email%20ieltsindicator.b2c.api%20registrantid\
+        %20offline_access&state=c06a3d05096243f4aec72fc22a34b142&\
+        code_challenge=zemFTyU4XRC3onKdeYrwJKPUq_74dnUCNBnn3SBp-bk&\
+        code_challenge_method=S256&\
+        response_mode=query
+button: login
+__RequestVerificationToken: CfDJ8HouxCI9N8RPhwSSUoFygRmgm5W6MHdUyYnBdss-DD_-Xl0QRhgus8fY0OLJp0AEewIHoRkNbLk5bEq-oR6kxSSF9SwakcgqKBasS5IVj9TrIKA5gX_QnAPZYrg1UV1ys1wR56hJDyGPqqkCJDZsknE
+
+
+
+
+
+https://eamidentity.britishcouncil.org/connect/authorize/callback?\
+client_id=ieltsindicator.b2c.app&redirect_uri=https%3A%2F%2Fieltsindicator.britishcouncil.org\
+%2Fcallback&response_type=code&scope=openid%20profile%20email%20ieltsindicator.b2c.api\
+%20registrantid%20offline_access&state=c06a3d05096243f4aec72fc22a34b142\
+&code_challenge=zemFTyU4XRC3onKdeYrwJKPUq_74dnUCNBnn3SBp-bk&code_challenge_method=S256&\
+response_mode=query
+client_id: ieltsindicator.b2c.app
+redirect_uri: https://ieltsindicator.britishcouncil.org/callback
+response_type: code
+scope: openid profile email ieltsindicator.b2c.api registrantid offline_access
+state: c06a3d05096243f4aec72fc22a34b142
+code_challenge: zemFTyU4XRC3onKdeYrwJKPUq_74dnUCNBnn3SBp-bk
+code_challenge_method: S256
+response_mode: query
+
+https://eamidentity.britishcouncil.org/connect/authorize/callback?\
+client_id=ieltsindicator.b2c.app&redirect_uri=https%3A%2F%2Fieltsindicator.britishcouncil.org\
+%2Fcallback&response_type=code&scope=openid%20profile%20email%20ieltsindicator.b2c.api\
+%20registrantid%20offline_access&state=c06a3d05096243f4aec72fc22a34b142&\
+code_challenge=zemFTyU4XRC3onKdeYrwJKPUq_74dnUCNBnn3SBp-bk&code_challenge_method=S256&\
+response_mode=query
+client_id: ieltsindicator.b2c.app
+redirect_uri: https://ieltsindicator.britishcouncil.org/callback
+response_type: code
+scope: openid profile email ieltsindicator.b2c.api registrantid offline_access
+state: c06a3d05096243f4aec72fc22a34b142
+code_challenge: zemFTyU4XRC3onKdeYrwJKPUq_74dnUCNBnn3SBp-bk
+code_challenge_method: S256
+response_mode: query
+
+
+
+
+
+
+
+
+
+
+https://ieltsindicator.britishcouncil.org/callback?code=nzL2EcnmC110tc7_OZRqe4g4EjgyarW659x69RIpK5Y&scope=openid%20profile%20email%20registrantid%20ieltsindicator.b2c.api%20offline_access&state=c06a3d05096243f4aec72fc22a34b142&session_state=HhyyLxmUKXMFBPUoV4AC2FBwncDTO-3FUJTCrRrnZQo.fyq1n9HB87cpiszmP___IQ
+code: nzL2EcnmC110tc7_OZRqe4g4EjgyarW659x69RIpK5Y
+scope: openid profile email registrantid ieltsindicator.b2c.api offline_access
+state: c06a3d05096243f4aec72fc22a34b142
+session_state: HhyyLxmUKXMFBPUoV4AC2FBwncDTO-3FUJTCrRrnZQo.fyq1n9HB87cpiszmP___IQ
+
+https://ieltsindicator.britishcouncil.org/callback?\
+code=8qT8E3xSrI4vmnC3jR6izgeYfZ5aLihhVpDDYVQIo2o&\
+scope=openid%20profile%20email%20registrantid%20ieltsindicator.b2c.api\
+%20offline_access&state=c06a3d05096243f4aec72fc22a34b142&\
+session_state=Hj8V6odazE5aYPqAiMSPWiWqCIMSIVq_KjH1Cw9pymI.BDRty_CE1qTFXDAw2K87xA
+
+code: 8qT8E3xSrI4vmnC3jR6izgeYfZ5aLihhVpDDYVQIo2o
+scope: openid profile email registrantid ieltsindicator.b2c.api offline_access
+state: c06a3d05096243f4aec72fc22a34b142
+session_state: Hj8V6odazE5aYPqAiMSPWiWqCIMSIVq_KjH1Cw9pymI.BDRty_CE1qTFXDAw2K87xA
+
+
+
+post 
+https://eamidentity.britishcouncil.org/connect/token
+client_id: ieltsindicator.b2c.app
+code: 8qT8E3xSrI4vmnC3jR6izgeYfZ5aLihhVpDDYVQIo2o
+redirect_uri: https://ieltsindicator.britishcouncil.org/callback
+code_verifier: 73b71aaddcc84592b11717951b0ac748e6349f225d244e22a2ee48527285d9dcff83c75f2edc4e94a0d7d3fd9d45d710
+grant_type: authorization_code
