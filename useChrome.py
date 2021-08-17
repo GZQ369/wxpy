@@ -16,6 +16,7 @@ def get_token(username, password):
     driver.find_element_by_id("Username").send_keys(username)
     driver.find_element_by_id("password_login").send_keys(password)
     driver.find_element_by_id("password_login").submit()
+    chrome_options.add_argument('')
     # time.sleep(5)
 # 　　#获取token的方法：
 # 　　''' 
