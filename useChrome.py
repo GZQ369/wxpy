@@ -1,6 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
+
 
 import time
 #浏览器模式设置
@@ -16,11 +18,11 @@ url = "https://eamidentity.britishcouncil.org/account/login?returnUrl=%2Fconnect
 
 def get_token(username, password):
 # 　　操作浏览器，打开url，用户名密码登陆
-    # driver.get(url)
-    # driver.find_element_by_id("Username").send_keys(username)
-    # driver.find_element_by_id("password_login").send_keys(password)
-    # driver.find_element_by_id("password_login").submit()
-    # # time.sleep(1)
+    driver.get(url)
+    driver.find_element_by_id("Username").send_keys(username)
+    driver.find_element_by_id("password_login").send_keys(password)
+    driver.find_element_by_id("password_login").submit()
+    time.sleep(1)
 # 　　#获取token的方法：
 # 　　''' 
 #    1、要从Local Storage中获取还是要从Session Storage中获取，具体看目标系统存到哪个中-----开发者模式查看
@@ -33,30 +35,54 @@ def get_token(username, password):
     driver.get("https://ieltsindicator.britishcouncil.org/")
     driver.find_element_by_class_name("css-19bqh2r").click()
     e = driver.find_element_by_id("react-select-2-input")
-    e.send_keys("Argentina")
+    e.send_keys("Afghanistan")
     e.send_keys(Keys.ENTER)
     #选择时间
     # c = driver.find_element_by_tag_name('abbr')
     # c = driver.find_element_by_css_selector('button.react-calendar__tile react-calendar__month-view__days__day available-day')
     # print(c)
-    d = driver.find_elements_by_class_name("react-calendar__tile react-calendar__month-view__days__day available-day")
-    print(d)
+    time.sleep(1.5)
+    #test data
+    driver.find_element_by_xpath("//abbr[@aria-label='September 15, 2021'][text()='15']").click()
+    time.sleep(1)
 
 
+    elements =  driver.find_elements_by_xpath("//abbr[@aria-label='September 14, 2021'][text()='14']")
 
+    
+    driver.find_elements_by_xpath("//div[@class='react-calendar__tile react-calendar__month-view__days__day available-day']/abbr[@aria-label='September 15, 2021'][text()='15']")
+    # c = driver.find_element_by_css_selector('button.react-calendar__tile react-calendar__month-view__days__day available-day').click()
+    # aria_label = driver.find_element_by_class_name('react-calendar__tile react-calendar__month-view__days__day available-day').click()
+
+    # elements = driver.find_elements('abbr', 'button')
+    for i in elements:
+                print("34325325",type(i))
+                # print(i.get_attribute("aria-label"))
+                i.click()
+    time.sleep(1.5)
+    # s1 = Select(driver.find_element_by_id('bc-select-wrapper css-2b097c-container'))
+    # s1.select_by_index(1)
+    
+    e = driver.find_element_by_id("react-select-3-input")
+    e.send_keys("17:20")
+    e.send_keys(Keys.ENTER)
+    # driver.find_element_by_tag_name("button.react-calendar__tile react-calendar__month-view__days__day available-day").click()
     # driver.get("https://ieltsindicator.britishcouncil.org/personal-details")
-    token = driver.execute_script('return sessionStorage.getItem("token");')
-    print(token)
-    return token
+    
+    # return token
+    time.sleep(1)
 
+    driver.find_element_by_xpath("//button[@class='btn btn-link'][text()='I already have an account']").click()
+    time.sleep(1)
+    token = driver.execute_script('return localStorage.getItem("persist:root");')
+    print(token)
+    return
 
 
 
 
 
     # driver.close()
-    return 
-
 get_token("intilrx@163.com","Yasi12345678")
 
 # 获取sessionid
