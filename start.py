@@ -46,8 +46,6 @@ def getExamDate(url):
     # 获取数据
     data = html.read()
     # 转换成字符串
-
-    # 截取字符串
     # print(data)
     return str(data)
 
@@ -212,7 +210,7 @@ def choiceStrategyTestTime():
                 else:
                     SpeakingCloseTime,examID = timeCompare(avaibleTests)
                     print("监测到能报名的{}国家，Listening-Reading-Writing 考试时间{}, speaking 考试时间{}".format(country,closeTime,SpeakingCloseTime))
-                    send_notice('yashi', 'bGxjFVZ5WvKoQUBJnP_zsJ', country,closeTime,SpeakingCloseTime )
+                    # send_notice('yashi', 'bGxjFVZ5WvKoQUBJnP_zsJ', country,closeTime,SpeakingCloseTime )
                     continue
         time.sleep(1.28)
         i+=1

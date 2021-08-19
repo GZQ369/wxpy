@@ -3,6 +3,8 @@ from selenium.webdriver.chrome.options import Options
 import time
 #浏览器模式设置
 chrome_options=Options()
+chrome_options.add_experimental_option("excludeSwitches", ['enable-automation']);
+
 # chrome_options.add_argument('--headless')
 """最终的效果：不会弹出浏览器窗口"""
 
@@ -12,12 +14,11 @@ url = "https://eamidentity.britishcouncil.org/account/login?returnUrl=%2Fconnect
 
 def get_token(username, password):
 # 　　操作浏览器，打开url，用户名密码登陆
-    driver.get(url)
-    driver.find_element_by_id("Username").send_keys(username)
-    driver.find_element_by_id("password_login").send_keys(password)
-    driver.find_element_by_id("password_login").submit()
-    chrome_options.add_argument('')
-    # time.sleep(5)
+    # driver.get(url)
+    # driver.find_element_by_id("Username").send_keys(username)
+    # driver.find_element_by_id("password_login").send_keys(password)
+    # driver.find_element_by_id("password_login").submit()
+    # time.sleep(1)
 # 　　#获取token的方法：
 # 　　''' 
 #    1、要从Local Storage中获取还是要从Session Storage中获取，具体看目标系统存到哪个中-----开发者模式查看
@@ -25,9 +26,19 @@ def get_token(username, password):
 #    3、一定要使用return，不然获取到的一直是None
 #    4、get的Item不一定就叫token，得具体看目标系统把token存到哪个变量中
 # 　　'''
-    token = driver.execute_script('return localStorage.getItem("client_id");')
-    print("token::",token)
+    # token = driver.execute_script('return localStorage.getItem("client_id");')
+    # print("token::",token)
+    driver.get("https://ieltsindicator.britishcouncil.org/")
+    driver.find_element_by_class_name("css-19bqh2r")
+    driver.find_element_by_id("react-select-2-input").send_keys("Argentina")
+    
+
+
+
+
+
+
     # driver.close()
-    return token
+    return 
 
 get_token("intilrx@163.com","Yasi12345678")
