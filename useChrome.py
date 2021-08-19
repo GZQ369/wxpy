@@ -1,5 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
+
 import time
 #浏览器模式设置
 chrome_options=Options()
@@ -18,7 +20,7 @@ def get_token(username, password):
     # driver.find_element_by_id("Username").send_keys(username)
     # driver.find_element_by_id("password_login").send_keys(password)
     # driver.find_element_by_id("password_login").submit()
-    # time.sleep(1)
+    # # time.sleep(1)
 # 　　#获取token的方法：
 # 　　''' 
 #    1、要从Local Storage中获取还是要从Session Storage中获取，具体看目标系统存到哪个中-----开发者模式查看
@@ -29,9 +31,23 @@ def get_token(username, password):
     # token = driver.execute_script('return localStorage.getItem("client_id");')
     # print("token::",token)
     driver.get("https://ieltsindicator.britishcouncil.org/")
-    driver.find_element_by_class_name("css-19bqh2r")
-    driver.find_element_by_id("react-select-2-input").send_keys("Argentina")
-    
+    driver.find_element_by_class_name("css-19bqh2r").click()
+    e = driver.find_element_by_id("react-select-2-input")
+    e.send_keys("Argentina")
+    e.send_keys(Keys.ENTER)
+    #选择时间
+    # c = driver.find_element_by_tag_name('abbr')
+    # c = driver.find_element_by_css_selector('button.react-calendar__tile react-calendar__month-view__days__day available-day')
+    # print(c)
+    d = driver.find_elements_by_class_name("react-calendar__tile react-calendar__month-view__days__day available-day")
+    print(d)
+
+
+
+    # driver.get("https://ieltsindicator.britishcouncil.org/personal-details")
+    token = driver.execute_script('return sessionStorage.getItem("token");')
+    print(token)
+    return token
 
 
 
@@ -42,3 +58,30 @@ def get_token(username, password):
     return 
 
 get_token("intilrx@163.com","Yasi12345678")
+
+# 获取sessionid
+def get_sessionid(self):
+    # 是要从localStorage中获取还是要从sessionStorage中获取，具体看目标系统存到哪个中
+    # window.sessionStorage和直接写sessionStorage是等效的
+    # 一定要使用return，不然获取到的一直是None
+    # get的Item不一定就叫sessionId，得具体看目标系统把sessionid存到哪个变量中
+    sessionid = self.browser.execute_script('return sessionStorage.getItem("sessionId");')
+
+    # 另外sessionid一般都直接通过返回Set-Cookies头设置到Cookie中，所以也可以从Cookie读取
+    # 获取浏览器所有Set-Cookie，返回对象是字典列表
+    # cookies = self.browser.get_cookies()
+    # 获取单项Cookie，是不是叫sessionId取决于系统存成什么变量，单项Cookie是字典
+    # cookie = self.browser.get_cookie("sessionId")
+    # cookie = cookie["value"]
+    # print(f"{cookies}")
+    return sessionid
+
+# 获取token
+def get_token(self):
+    # 是要从localStorage中获取还是要从sessionStorage中获取，具体看目标系统存到哪个中
+    # window.sessionStorage和直接写sessionStorage是等效的
+    # 一定要使用return，不然获取到的一直是None
+    # get的Item不一定就叫token，得具体看目标系统把token存到哪个变量中
+    token = self.browser.execute_script('return sessionStorage.getItem("token");')
+    # print(f"{token}")
+    return token
