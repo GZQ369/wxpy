@@ -1,7 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import Select
 
 
 import time
@@ -14,6 +13,7 @@ chrome_options.add_experimental_option("excludeSwitches", ['enable-automation'])
 
 driver = webdriver.Chrome(chrome_options=chrome_options)
 url = "https://eamidentity.britishcouncil.org/account/login?returnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3Dieltsindicator.b2c.app%26redirect_uri%3Dhttps%253A%252F%252Fieltsindicator.britishcouncil.org%252Fcallback%26response_type%3Dcode%26scope%3Dopenid%2520profile%2520email%2520ieltsindicator.b2c.api%2520registrantid%2520offline_access%26state%3D24dfa24d12514ac0b5bc0e0de3d0774d%26code_challenge%3DO-hwSD9dU0mEyPwG43vnBkxZjWBiblXxbNm5GfY3Z0c%26code_challenge_method%3DS256%26response_mode%3Dquery"
+driver.implicitly_wait(5) # seconds
 
 
 def get_token(username, password):
@@ -22,7 +22,7 @@ def get_token(username, password):
     driver.find_element_by_id("Username").send_keys(username)
     driver.find_element_by_id("password_login").send_keys(password)
     driver.find_element_by_id("password_login").submit()
-    time.sleep(1)
+    # time.sleep(1)
 # 　　#获取token的方法：
 # 　　''' 
 #    1、要从Local Storage中获取还是要从Session Storage中获取，具体看目标系统存到哪个中-----开发者模式查看
@@ -35,6 +35,7 @@ def get_token(username, password):
     driver.get("https://ieltsindicator.britishcouncil.org/")
     driver.find_element_by_class_name("css-19bqh2r").click()
     e = driver.find_element_by_id("react-select-2-input")
+    #1.选择国家
     e.send_keys("Afghanistan")
     e.send_keys(Keys.ENTER)
     #选择时间
@@ -42,11 +43,11 @@ def get_token(username, password):
     # c = driver.find_element_by_css_selector('button.react-calendar__tile react-calendar__month-view__days__day available-day')
     # print(c)
     time.sleep(1.5)
-    #test data
+    #test data  2.笔试时间
     driver.find_element_by_xpath("//abbr[@aria-label='September 15, 2021'][text()='15']").click()
     time.sleep(1)
 
-
+#3.口语考试时间
     elements =  driver.find_elements_by_xpath("//abbr[@aria-label='September 14, 2021'][text()='14']")
 
     
@@ -64,6 +65,7 @@ def get_token(username, password):
     # s1.select_by_index(1)
     
     e = driver.find_element_by_id("react-select-3-input")
+#3.1 口语小时
     e.send_keys("17:20")
     e.send_keys(Keys.ENTER)
     # driver.find_element_by_tag_name("button.react-calendar__tile react-calendar__month-view__days__day available-day").click()
@@ -76,6 +78,44 @@ def get_token(username, password):
     time.sleep(1)
     token = driver.execute_script('return localStorage.getItem("persist:root");')
     print(token)
+    # driver.get("https://ieltsindicator.britishcouncil.org/personal-details")
+    time.sleep(1)
+    driver.find_element_by_xpath("//button[@class='uppy-FileInput-btn btn btn-primary'][text()='Choose files']")
+    e = driver.find_element_by_class_name("uppy-FileInput-input")
+#4.省份证正反面
+    e.send_keys("C:\\Users\\gongzhiqiang\\Videos\\Captures\\1234.gif")
+    # e.send_keys(Keys.ENTER)
+
+    e.send_keys("C:\\Users\\gongzhiqiang\\Videos\\Captures\\123.pdf")
+    # e.send_keys(Keys.ENTER)
+    time.sleep(0.8)
+
+    # e = driver.find_element_by_name("mobileNumber")
+    # e.send_keys('1234567890')
+    # e.send_keys(Keys.ENTER)
+#5.省份证号
+    e = driver.find_element_by_name("idNumber")
+    e.send_keys('1234567890')
+    e.send_keys(Keys.ENTER)
+    time.sleep(0.8)
+    driver.find_element_by_name('acceptIeltsTermsAndConditions').click()
+    time.sleep(0.8)
+
+    # driver.find_element_by_xpath("//input[@name='gender'][text()='Female']").send_keys(Keys.SPACE)
+    time.sleep(0.8)
+#6.性别
+    elements = driver.find_elements_by_name('gender')
+    for i in elements:
+            print("34325325",type(i))
+            # print(i.get_attribute("aria-label"))
+            i.click()
+    # driver.find_element_by_xpath("//input[@name='idType'][text()='Passport']").click()
+    time.sleep(0.8)
+
+    driver.find_element_by_name('idType').click()
+
+
+    driver.find_element_by_xpath("//button[@class='btn btn-primary'][text()='Pay Now']").click()
     return
 
 
@@ -92,7 +132,6 @@ def get_sessionid(self):
     # 一定要使用return，不然获取到的一直是None
     # get的Item不一定就叫sessionId，得具体看目标系统把sessionid存到哪个变量中
     sessionid = self.browser.execute_script('return sessionStorage.getItem("sessionId");')
-
     # 另外sessionid一般都直接通过返回Set-Cookies头设置到Cookie中，所以也可以从Cookie读取
     # 获取浏览器所有Set-Cookie，返回对象是字典列表
     # cookies = self.browser.get_cookies()
@@ -103,11 +142,11 @@ def get_sessionid(self):
     return sessionid
 
 # 获取token
-def get_token(self):
+def get_tokens(self):
     # 是要从localStorage中获取还是要从sessionStorage中获取，具体看目标系统存到哪个中
     # window.sessionStorage和直接写sessionStorage是等效的
     # 一定要使用return，不然获取到的一直是None
     # get的Item不一定就叫token，得具体看目标系统把token存到哪个变量中
-    token = self.browser.execute_script('return sessionStorage.getItem("token");')
+    token = self.browser.execute_script('return localStorage.getItem("persist:root");')
     # print(f"{token}")
     return token

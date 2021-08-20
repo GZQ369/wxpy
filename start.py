@@ -3,6 +3,7 @@ from urllib.request import Request, urlopen
 from twilio.rest import Client
 import time
 import requests
+import socket
 
 # zb网站获取数据Api
 countryUrl = "https://ieltsindicator.britishcouncil.org/api/availabilities?CountryId="
@@ -217,3 +218,18 @@ def choiceStrategyTestTime():
 
 choiceStrategyTestTime()
 
+
+def offMutinitl():
+    HOST='127.0.0.1'
+    PORT=5555
+    try:
+        s = socket.socket()
+        s.bind((HOST, PORT))
+        # main()
+        choiceStrategyTestTime()
+        s.close()
+    except KeyboardInterrupt:
+        s.close()
+    except:
+        print(' 程序异常，已退出.')
+        exit(0)
