@@ -4,6 +4,7 @@ from twilio.rest import Client
 import time
 import requests
 import socket
+from useChrome import *
 
 # zb网站获取数据Api
 countryUrl = "https://ieltsindicator.britishcouncil.org/api/availabilities?CountryId="
@@ -153,6 +154,22 @@ def sendMessage(country,closeTime,SpeakingCloseTime):
     # print(call.sid)
 # sendMessage(1,2,3)
 # exit()
+def inputId():
+    userId = input("请输入身份证号:")
+
+    if len(userId) != 18:
+        print("输入错误!!!")
+        inputId()
+    else:
+        print('请确认身份证号是否正确:' , userId)
+        Isright = input('y-正确, n-错误')
+        if Isright != 'y':
+            inputId()
+    return userId
+# print(inputId())
+# exit()      
+
+
 
 def send_notice(event_name, key, country,closeTime,SpeakingCloseTime):
     url = "https://maker.ifttt.com/trigger/"+event_name+"/with/key/"+key+""
@@ -168,13 +185,31 @@ def choiceStrategyTestTime():
     选择考试时间的策略，选第一个时间
     :return:
     """
-    userId = input("请输入你的用户名/手机号: ")
+    # userId = input("请输入你的用户名/手机号: ")
     
-    password = input("请输入你的密码: ")
-    if password != userId[-6:] or len(userId) !=11 :
-        print("密码或用户名输入错误")
+    # password = input("请输入你的密码: ")
+    # if password != userId[-6:] or len(userId) !=11 :
+    #     print("密码或用户名输入错误")
+    #     return
+    
+   
+    userId = inputId()
+
+    gender = input("请输入性别(0-女性,1-男性):")
+    if gender != '0' and  gender != '1':
+        print("输入错误!!!")
         return
-    
+    mkdir(userId[-6:])
+    IdFile = input("请将上传的文件放入{}文件夹内!放入完毕请输入: y 继续" .format(userId[-6:]))
+    if IdFile != 'y' :
+        print("输入错误!!!")
+        return
+    fileList = getFileName(userId[-6:])
+    print("这是即将上传的两个文件:",fileList)
+
+    username = input("请输入报名账号: ")
+    password = input("请输入报名密码: ")
+
     dateChoice = input("请输入报名日期(1-31日任一数字日期):")
     if not dateChoice.isdigit():
         return
@@ -184,7 +219,7 @@ def choiceStrategyTestTime():
     
 
     allCountryid = getAllcountryId()
-    i=1
+    i=1  #开启第巨轮监测
     while True:
         print("即将开启第{}轮监测...... " .format(i))
         for key,country in allCountryid.items():
@@ -211,12 +246,14 @@ def choiceStrategyTestTime():
                 else:
                     SpeakingCloseTime,examID = timeCompare(avaibleTests)
                     print("监测到能报名的{}国家，Listening-Reading-Writing 考试时间{}, speaking 考试时间{}".format(country,closeTime,SpeakingCloseTime))
+                    get_token(username, password, userId[-6:],userId, country , gender, closeTime, SpeakingCloseTime)
+
                     # send_notice('yashi', 'bGxjFVZ5WvKoQUBJnP_zsJ', country,closeTime,SpeakingCloseTime )
-                    continue
+                    # continue
         time.sleep(1.28)
         i+=1
 
-choiceStrategyTestTime()
+# choiceStrategyTestTime()
 
 
 def offMutinitl():
@@ -233,3 +270,5 @@ def offMutinitl():
     except:
         print(' 程序异常，已退出.')
         exit(0)
+
+offMutinitl()
