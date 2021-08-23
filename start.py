@@ -5,6 +5,7 @@ import time
 import requests
 import socket
 from useChrome import *
+import datetime
 
 # zb网站获取数据Api
 countryUrl = "https://ieltsindicator.britishcouncil.org/api/availabilities?CountryId="
@@ -178,19 +179,23 @@ def send_notice(event_name, key, country,closeTime,SpeakingCloseTime):
     payload2 = "{\n    \"value1\": \""+closeTime+"\"\n}"
     response = requests.request("POST", url, data=payload.encode('utf-8'), headers=headers)
     print(response.text)
- 
+
+def tanresChainTime(clonstime):
+    fd = datetime.datetime.strptime(clonstime, "%Y-%m-%dT%H:%M:%SZ")
+    return (fd + datetime.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
+                
 
 def choiceStrategyTestTime():
     """
     选择考试时间的策略，选第一个时间
     :return:
     """
-    # userId = input("请输入你的用户名/手机号: ")
+    userId = input("请输入你的用户名/手机号: ")
     
-    # password = input("请输入你的密码: ")
-    # if password != userId[-6:] or len(userId) !=11 :
-    #     print("密码或用户名输入错误")
-    #     return
+    password = input("请输入你的密码: ")
+    if password != userId[-6:] or len(userId) !=11 :
+        print("密码或用户名输入错误")
+        return
     
    
     userId = inputId()
@@ -246,10 +251,22 @@ def choiceStrategyTestTime():
                 else:
                     SpeakingCloseTime,examID = timeCompare(avaibleTests)
                     print("监测到能报名的{}国家，Listening-Reading-Writing 考试时间{}, speaking 考试时间{}".format(country,closeTime,SpeakingCloseTime))
-                    get_token(username, password, userId[-6:],userId, country , gender, closeTime, SpeakingCloseTime)
+                        
+                    closeTime = tanresChainTime(closeTime)
+                    SpeakingCloseTime = tanresChainTime(SpeakingCloseTime)
 
-                    # send_notice('yashi', 'bGxjFVZ5WvKoQUBJnP_zsJ', country,closeTime,SpeakingCloseTime )
-                    # continue
+                    try:
+
+                        get_token(username, password, userId[-6:],userId, country , gender, closeTime, SpeakingCloseTime)
+                        #通知支付成功
+                        send_notice('yasi_pay', 'bGxjFVZ5WvKoQUBJnP_zsJ', country + "报名成功", userId + "报名成功", closeTime+"口语考试时间：" + SpeakingCloseTime + "，倒计时75min报名时间截止，快去付款吧！" )
+                        return
+                    except:
+                        #通知失败
+                        send_notice('yasi_pay', 'bGxjFVZ5WvKoQUBJnP_zsJ', country + "报名失败", userId + "报名失败，请继续观察，正在努力重试······", closeTime+"口语考试时间："+SpeakingCloseTime )
+                        driver.close()
+                        # send_notice('yasi', 'bGxjFVZ5WvKoQUBJnP_zsJ', country,closeTime,SpeakingCloseTime )
+                        
         time.sleep(1.28)
         i+=1
 
@@ -269,6 +286,7 @@ def offMutinitl():
         s.close()
     except:
         print(' 程序异常，已退出.')
+        return 
         exit(0)
 
 offMutinitl()

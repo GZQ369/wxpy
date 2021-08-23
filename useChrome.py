@@ -19,6 +19,8 @@ def getFileName(path):
         # print(dirs) #当前路径下所有子目录  
         print(files) #当前路径下所有非目录子文件  
         ls = os.getcwd()
+        if '\\' in ls:
+            ls = ls.replace('\\', '/')
         if len(files) !=2:
             print("身份信息文件不正确!!!")
             exit()
@@ -28,7 +30,7 @@ def getFileName(path):
             resp.append(i)
         return resp
 
-# getFileName("21345")
+# getFileName("345678")
 
 def mkdir(path):
     isExists=os.path.exists(path)
@@ -52,8 +54,9 @@ def getFmtDate(date):
 
 # a,d,_ = getFmtDate('2021-09-15T16:00:00Z')
 # exit()
-def get_token(username, password, filePath, userId, country, gendor, writeTime, speakTime):
 
+
+def get_token(username, password, filePath, userId, country, gendor, writeTime, speakTime):
 
     chrome_options=Options()
     chrome_options.add_experimental_option("excludeSwitches", ['enable-automation']);
@@ -62,6 +65,8 @@ def get_token(username, password, filePath, userId, country, gendor, writeTime, 
     # chrome_options.add_argument('--headless')
     """最终的效果：不会弹出浏览器窗口"""
 
+    chrome_options.add_argument('--disable-gpu')
+    global  driver
     driver = webdriver.Chrome(chrome_options=chrome_options)
     url = "https://eamidentity.britishcouncil.org/account/login?returnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3Dieltsindicator.b2c.app%26redirect_uri%3Dhttps%253A%252F%252Fieltsindicator.britishcouncil.org%252Fcallback%26response_type%3Dcode%26scope%3Dopenid%2520profile%2520email%2520ieltsindicator.b2c.api%2520registrantid%2520offline_access%26state%3D24dfa24d12514ac0b5bc0e0de3d0774d%26code_challenge%3DO-hwSD9dU0mEyPwG43vnBkxZjWBiblXxbNm5GfY3Z0c%26code_challenge_method%3DS256%26response_mode%3Dquery"
     driver.implicitly_wait(5) # seconds
