@@ -156,13 +156,13 @@ def sendMessage(country,closeTime,SpeakingCloseTime):
 # sendMessage(1,2,3)
 # exit()
 def inputId():
-    userId = input("请输入身份证号:")
+    userId = input("请输入护照号:")
 
-    if len(userId) != 18:
+    if len(userId) > 18:
         print("输入错误!!!")
         inputId()
     else:
-        print('请确认身份证号是否正确:' , userId)
+        print('请确认护照号号是否正确:' , userId)
         Isright = input('y-正确, n-错误')
         if Isright != 'y':
             inputId()
@@ -210,7 +210,7 @@ def choiceStrategyTestTime():
         print("输入错误!!!")
         return
     fileList = getFileName(userId[-6:])
-    print("这是即将上传的两个文件:",fileList)
+    print("这是即将上传的文件:",fileList)
 
     username = input("请输入报名账号: ")
     password = input("请输入报名密码: ")

@@ -12,7 +12,13 @@ def choiceGendor(elements,nnum):
         if i==int(nnum):
             elements[i].click()
             return
-
+def checkSize(file):
+    fsize = os.path.getsize(file)
+    f_Mb = fsize/float(1024)/float(1024)
+    if f_Mb<=3.0:
+        return True
+    return False
+# print(checkSize("./123.png"))
 def getFileName(path):
     for root, dirs, files in os.walk(path):  
         # print(root) #当前目录路径  
@@ -21,16 +27,21 @@ def getFileName(path):
         ls = os.getcwd()
         if '\\' in ls:
             ls = ls.replace('\\', '/')
-        if len(files) !=2:
+        if len(files) >2:
             print("身份信息文件不正确!!!")
             exit()
         resp = []
         for i in files:
             i = ls + '/'+ path + '/' + i
-            resp.append(i)
+            if checkSize(i):
+                resp.append(i)
+            else:
+                print("error：文件大小小于3Mb")
+                exit()
+
         return resp
 
-# getFileName("345678")
+# print(getFileName("345678"))
 
 def mkdir(path):
     isExists=os.path.exists(path)
