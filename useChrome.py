@@ -3,8 +3,9 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 import os
 import time
-
-
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 def choiceGendor(elements,nnum):
     # 0-famale  1-male
@@ -38,7 +39,8 @@ def getFileName(path):
             else:
                 print("error：文件大小小于3Mb")
                 exit()
-
+        if resp==[]:
+            exit(0)
         return resp
 
 # print(getFileName("345678"))
@@ -147,8 +149,10 @@ def get_token(username, password, filePath, userId, country, gendor, writeTime, 
     time.sleep(1)
     token = driver.execute_script('return localStorage.getItem("persist:root");')
     print(token)
-    # driver.get("https://ieltsindicator.britishcouncil.org/personal-details")
-    time.sleep(1)
+
+
+    WebDriverWait(driver, 15, 0.5).until(EC.presence_of_element_located((By.CLASS_NAME, 'uppy-FileInput-input')))
+
     driver.find_element_by_xpath("//button[@class='uppy-FileInput-btn btn btn-primary'][text()='Choose files']")
     e = driver.find_element_by_class_name("uppy-FileInput-input")
 #4.省份证正反面
@@ -190,15 +194,17 @@ def get_token(username, password, filePath, userId, country, gendor, writeTime, 
     driver.find_element_by_name('acceptIeltsTermsAndConditions').click()
     time.sleep(0.8)
     driver.find_element_by_xpath("//button[@class='btn btn-primary'][text()='Pay Now']").click()
-
-   
+    WebDriverWait(driver, 15, 0.5).until(EC.presence_of_element_located((By.ID, 'btn-pay-by-paypal')))
+    payId = driver.current_url
+    print(payId)
+    return payId[-46:]
 
 
 
 
 
     # driver.close()
-# get_token("intilrx@163.com","Yasi12345678", '21345','123456789012345678','Afghanistan','1','2021-09-15T07:00:00Z','2021-09-13T17:00:00Z')
+# get_token("intilrx@163.com","Yasi12345678", '345678','123456789012345678','Afghanistan','1','2021-09-15T07:00:00Z','2021-09-13T17:20:00Z')
 
 # 获取sessionid
 def get_sessionid(self):

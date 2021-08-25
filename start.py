@@ -169,9 +169,19 @@ def inputId():
     return userId
 # print(inputId())
 # exit()      
+import csv
+def readUserData(ls):
+    userList = []
+    csv_reader = csv.reader(open(ls))
+    for line in csv_reader:
+        userList.append(line)
+        print(line)
+    
 
+    return userList[1:]
 
-
+# readUserData("./dns1.CSV")
+# exit(0)
 def send_notice(event_name, key, country,closeTime,SpeakingCloseTime):
     url = "https://maker.ifttt.com/trigger/"+event_name+"/with/key/"+key+""
     payload = "{\n    \"value1\": \""+country+" \",\"value2\": \""+closeTime+"\",\"value3\": \""+SpeakingCloseTime+"\"\n}"
@@ -184,8 +194,9 @@ def tanresChainTime(clonstime):
     fd = datetime.datetime.strptime(clonstime, "%Y-%m-%dT%H:%M:%SZ")
     return (fd + datetime.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
                 
+allCountryid = getAllcountryId()
 
-def choiceStrategyTestTime():
+def choiceStrategyTestTime(username, password, dateChoice, userId, gender):
     """
     选择考试时间的策略，选第一个时间
     :return:
@@ -197,13 +208,13 @@ def choiceStrategyTestTime():
         print("密码或用户名输入错误")
         return
     
-   
+    #护照id
     userId = inputId()
 
-    gender = input("请输入性别(0-女性,1-男性):")
-    if gender != '0' and  gender != '1':
-        print("输入错误!!!")
-        return
+    # gender = input("请输入性别(0-女性,1-男性):")
+    # if gender != '0' and  gender != '1':
+    #     print("输入错误!!!")
+    #     return
     mkdir(userId[-6:])
     IdFile = input("请将上传的文件放入{}文件夹内!放入完毕请输入: y 继续" .format(userId[-6:]))
     if IdFile != 'y' :
@@ -212,21 +223,20 @@ def choiceStrategyTestTime():
     fileList = getFileName(userId[-6:])
     print("这是即将上传的文件:",fileList)
 
-    username = input("请输入报名账号: ")
-    password = input("请输入报名密码: ")
+    # username = input("请输入报名账号: ")
+    # password = input("请输入报名密码: ")
 
-    dateChoice = input("请输入报名日期(1-31日任一数字日期):")
-    if not dateChoice.isdigit():
-        return
-    dateChoice = int(dateChoice)    
-    if dateChoice > 31 :
-        return
+    # dateChoice = input("请输入报名日期(1-31日任一数字日期):")
+    # if not dateChoice.isdigit():
+    #     return
+    # dateChoice = int(dateChoice)    
+    # if dateChoice > 31 :
+    #     return
     
 
-    allCountryid = getAllcountryId()
     i=1  #开启第巨轮监测
     while True:
-        print("即将开启第{}轮监测...... " .format(i))
+        print("单机开启第{}轮监测...... " .format(i))
         for key,country in allCountryid.items():
             #选着听读写考试时间
             print("正在检查能报名的 {}  国家...{}" .format(country,key))
@@ -257,9 +267,9 @@ def choiceStrategyTestTime():
 
                     try:
 
-                        get_token(username, password, userId[-6:],userId, country , gender, closeTime, SpeakingCloseTime)
+                        payid = get_token(username, password, userId[-6:],userId, country , gender, closeTime, SpeakingCloseTime)
                         #通知支付成功
-                        send_notice('yasi_pay', 'bGxjFVZ5WvKoQUBJnP_zsJ', country + "报名成功", userId + "报名成功", closeTime+"口语考试时间：" + SpeakingCloseTime + "，倒计时75min报名时间截止，快去付款吧！" )
+                        send_notice('yasi_pay', 'bGxjFVZ5WvKoQUBJnP_zsJ', country + "报名成功", userId + "报名成功:" + payid , closeTime+"口语考试时间：" + SpeakingCloseTime + "，倒计时75min报名时间截止，快去付款吧！" )
                         return
                     except:
                         #通知失败
