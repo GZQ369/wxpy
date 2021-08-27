@@ -6,6 +6,7 @@ import time
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+import random
 
 def choiceGendor(elements,nnum):
     # 0-famale  1-male
@@ -40,7 +41,10 @@ def getFileName(path):
                 print("error：文件大小小于3Mb")
                 exit()
         if resp==[]:
+
+            print("上传文件夹为空,退出程序...")
             exit(0)
+
         return resp
 
 # print(getFileName("345678"))
@@ -69,7 +73,7 @@ def getFmtDate(date):
 # exit()
 
 
-def get_token(username, password, filePath, userId, country, gendor, writeTime, speakTime):
+def get_token(username, password,  userId, country, gendor, writeTime, speakTime ):
 
     chrome_options=Options()
     chrome_options.add_experimental_option("excludeSwitches", ['enable-automation']);
@@ -81,6 +85,11 @@ def get_token(username, password, filePath, userId, country, gendor, writeTime, 
     chrome_options.add_argument('--disable-gpu')
     global  driver
     driver = webdriver.Chrome(chrome_options=chrome_options)
+    # seed = [i*60+20 for i in range(1,15)]
+    # idf = random.choice(seed)  #随机返回列表a中的一个元素
+
+    idf = random.randint(100,900)
+    driver.set_window_position(idf, idf*1.2)
     url = "https://eamidentity.britishcouncil.org/account/login?returnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3Dieltsindicator.b2c.app%26redirect_uri%3Dhttps%253A%252F%252Fieltsindicator.britishcouncil.org%252Fcallback%26response_type%3Dcode%26scope%3Dopenid%2520profile%2520email%2520ieltsindicator.b2c.api%2520registrantid%2520offline_access%26state%3D24dfa24d12514ac0b5bc0e0de3d0774d%26code_challenge%3DO-hwSD9dU0mEyPwG43vnBkxZjWBiblXxbNm5GfY3Z0c%26code_challenge_method%3DS256%26response_mode%3Dquery"
     driver.implicitly_wait(5) # seconds
 
@@ -156,7 +165,7 @@ def get_token(username, password, filePath, userId, country, gendor, writeTime, 
     driver.find_element_by_xpath("//button[@class='uppy-FileInput-btn btn btn-primary'][text()='Choose files']")
     e = driver.find_element_by_class_name("uppy-FileInput-input")
 #4.省份证正反面
-    for i in getFileName(filePath):
+    for i in getFileName(userId):
 
         e.send_keys(i)
     # e.send_keys(Keys.ENTER)
