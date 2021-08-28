@@ -1,11 +1,15 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from useChrome import mkdir,getFileName
+import threading
 
 
 
 def openChrome(idf):
 
+    thread_name = threading.current_thread().name
+
+    print(thread_name)
     chrome_options=Options()
     chrome_options.add_experimental_option("excludeSwitches", ['enable-automation']);
     chrome_options.add_experimental_option("detach", True)
@@ -24,21 +28,24 @@ def checkInput(userList):
     for item in userList:
         if len(item[2]) > 18:
             print("护照号输入错误!!!")
-            return
+            exit(0)
 
         mkdir(item[2])
         if not item[3].isdigit():
 
             print("考试日期选择输入错误!!!")
-            return
+
+            exit(0)
 
         if int(item[3]) > 31 :
             print("考试日期选择输入错误!!!")
-            return
+            exit(0)
+
     
         if item[4] != '0' and  item[4] != '1':
             print("性别输入错误!!!")
-            return
+            exit(0)
+
         
         IdFile = input("请将上传的文件放入{}文件夹内!放入完毕请输入: y 确认继续:" .format(item[2]))
         

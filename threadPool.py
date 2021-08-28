@@ -12,7 +12,7 @@ def mutilThread(coreNum, runFunc, userDataList):
     with ThreadPoolExecutor(coreNum) as executor:
         while userDataList:
             each = userDataList.pop()
-            print("正在执行任务:{}" .format(each))
+            print("添加入队列:{}" .format(each))
             executor.submit(runFunc,each)
 
 
@@ -27,7 +27,6 @@ def main():
     end1=time.time()
     print("time1: "+str(end1-start1))
     start2=time.time()
-
 
 
     with ThreadPoolExecutor(3) as executor:

@@ -5,9 +5,10 @@ from twilio.rest import Client
 import time
 import requests
 import socket
-from useChrome import *
+from useChrome import get_token
 import datetime
 from check import checkInput
+import threading
 
 # zb网站获取数据Api
 countryUrl = "https://ieltsindicator.britishcouncil.org/api/availabilities?CountryId="
@@ -78,8 +79,10 @@ def getAllcountryId():
 def getTestYMD(counId):
     Url = countryUrl + str(counId)
     return getExamDate(Url)
-
-# print(getTestYMD(140))
+# YMD = getTestYMD(140)
+# d = json.loads(YMD)
+# print(d[0]["module"])
+# exit()
 
 def getTestHMS(examId, module):
     Url = speakExamUrl + examId + '&Module=' + str(module)
@@ -92,7 +95,9 @@ def praseYMDDate(countryId):
     :return:
     """
     YMD = getTestYMD(countryId)  # 阿富汗是140
-    d = json.loads(YMD[2:-1])
+    # print(YMD)
+
+    d = json.loads(YMD)
     if len(d) == 0:
         return 1,[]
     module = d[0]['module']
@@ -109,7 +114,7 @@ def praseHMSDate(examId, module):
     :return:
     """
     HMS = getTestHMS(examId, module)
-    d = json.loads(HMS[2:-1])
+    d = json.loads(HMS)
     if len(d) == 0:
         return [],0
     avaibleCount = len(d[0]["tests"])
@@ -216,6 +221,9 @@ def choiceStrategyTestTime(userData):
     :return:
     """
     username, password, dateChoice, userId, gender= userData[0],userData[1],userData[3],userData[2],userData[4]
+    
+    thread_name = threading.current_thread().name
+
     #护照id
     # userId = inputId()
 
@@ -247,7 +255,7 @@ def choiceStrategyTestTime(userData):
         print("开启第{}轮监测...... " .format(i))
         for key,country in allCountryid.items():
             #选着听读写考试时间
-            print("正在检查能报名的 {}  国家...{}" .format(country,key))
+            print("{}正在检查能报名的 {}  国家...{}" .format(thread_name, country,key))
             module, tests = praseYMDDate(key)
             if len(tests)==0:
                 time.sleep(0.85)
@@ -255,10 +263,9 @@ def choiceStrategyTestTime(userData):
             else:
                 closeTime,examID = timeCompare(tests)
 
-                choiceDay = int(closeTime[8:10])
+                choiceDay = closeTime[8:10]
                 if choiceDay != dateChoice:
                     continue
-
                 #验证这些时间中可以选折使用的speaking考试时间
                 time.sleep(0.012)
 
@@ -268,7 +275,7 @@ def choiceStrategyTestTime(userData):
                     continue
                 else:
                     SpeakingCloseTime,examID = timeCompare(avaibleTests)
-                    print("监测到能报名的{}国家，Listening-Reading-Writing 考试时间{}, speaking 考试时间{}".format(country,closeTime,SpeakingCloseTime))
+                    print("{}监测到能报名的{}国家，Listening-Reading-Writing 考试时间{}, speaking 考试时间{}".format(thread_name, country,closeTime,SpeakingCloseTime))
                         
                     closeTime = tanresChainTime(closeTime)
                     SpeakingCloseTime = tanresChainTime(SpeakingCloseTime)
@@ -282,8 +289,7 @@ def choiceStrategyTestTime(userData):
                     except:
                         #通知失败
                         send_notice('yasi_pay', 'bGxjFVZ5WvKoQUBJnP_zsJ', country + "报名失败", userId + "报名失败，请继续观察，正在努力重试······", closeTime+"口语考试时间："+SpeakingCloseTime )
-                        driver.close()
-                        print("正在加入重试队列重试{}......".format(userData))
+                        print("{}正在加入重试队列重试{}......".format(thread_name, userData))
                          #任务失败加入重试队列
                         userls.append()
                         # send_notice('yasi', 'bGxjFVZ5WvKoQUBJnP_zsJ', country,closeTime,SpeakingCloseTime )

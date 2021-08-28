@@ -83,12 +83,11 @@ def get_token(username, password,  userId, country, gendor, writeTime, speakTime
     """最终的效果：不会弹出浏览器窗口"""
 
     chrome_options.add_argument('--disable-gpu')
-    global  driver
     driver = webdriver.Chrome(chrome_options=chrome_options)
     # seed = [i*60+20 for i in range(1,15)]
     # idf = random.choice(seed)  #随机返回列表a中的一个元素
 
-    idf = random.randint(100,900)
+    idf = random.randint(100,400)
     driver.set_window_position(idf, idf*1.2)
     url = "https://eamidentity.britishcouncil.org/account/login?returnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3Dieltsindicator.b2c.app%26redirect_uri%3Dhttps%253A%252F%252Fieltsindicator.britishcouncil.org%252Fcallback%26response_type%3Dcode%26scope%3Dopenid%2520profile%2520email%2520ieltsindicator.b2c.api%2520registrantid%2520offline_access%26state%3D24dfa24d12514ac0b5bc0e0de3d0774d%26code_challenge%3DO-hwSD9dU0mEyPwG43vnBkxZjWBiblXxbNm5GfY3Z0c%26code_challenge_method%3DS256%26response_mode%3Dquery"
     driver.implicitly_wait(5) # seconds
@@ -109,6 +108,8 @@ def get_token(username, password,  userId, country, gendor, writeTime, speakTime
     # token = driver.execute_script('return localStorage.getItem("client_id");')
     # print("token::",token)
     driver.get("https://ieltsindicator.britishcouncil.org/")
+    WebDriverWait(driver, 25, 0.5).until(EC.presence_of_element_located((By.CLASS_NAME, 'css-19bqh2r')))
+
     driver.find_element_by_class_name("css-19bqh2r").click()
     e = driver.find_element_by_id("react-select-2-input")
 #1.选择国家
@@ -122,13 +123,15 @@ def get_token(username, password,  userId, country, gendor, writeTime, speakTime
 #test data  2.笔试时间
     a,b,c = getFmtDate(writeTime)
     driver.find_element_by_xpath("//abbr[@aria-label='{}'][text()='{}']" .format(a,b)).click()
-    time.sleep(1)
+    time.sleep(3.5)
 
 #3.口语考试时间
     a,b,c = getFmtDate(speakTime)
+    WebDriverWait(driver, 15, 0.5).until(EC.presence_of_element_located((By.XPATH, "//abbr[@aria-label='{}'][text()='{}']" .format(a,b))))
+
     # elements =  driver.find_elements_by_xpath("//abbr[@aria-label='September 14, 2021'][text()='14']")
     elements =  driver.find_elements_by_xpath("//abbr[@aria-label='{}'][text()='{}']" .format(a,b))
-
+    print("//abbr[@aria-label='{}'][text()='{}'".format(a,b))
 
     
     # driver.find_elements_by_xpath("//div[@class='react-calendar__tile react-calendar__month-view__days__day available-day']/abbr[@aria-label='September 15, 2021'][text()='15']")
@@ -137,10 +140,10 @@ def get_token(username, password,  userId, country, gendor, writeTime, speakTime
 
     # elements = driver.find_elements('abbr', 'button')
     for i in elements:
-                print("34325325",type(i))
-                # print(i.get_attribute("aria-label"))
-                i.click()
-    time.sleep(1.5)
+        print("34325325",type(i))
+        i.click()
+        # print(i.get_attribute("aria-label"))
+    time.sleep(1.6)
     # s1 = Select(driver.find_element_by_id('bc-select-wrapper css-2b097c-container'))
     # s1.select_by_index(1)
     
@@ -156,11 +159,11 @@ def get_token(username, password,  userId, country, gendor, writeTime, speakTime
 
     driver.find_element_by_xpath("//button[@class='btn btn-link'][text()='I already have an account']").click()
     time.sleep(1)
-    token = driver.execute_script('return localStorage.getItem("persist:root");')
-    print(token)
+    # token = driver.execute_script('return localStorage.getItem("persist:root");')
+    # print(token)
 
 
-    WebDriverWait(driver, 15, 0.5).until(EC.presence_of_element_located((By.CLASS_NAME, 'uppy-FileInput-input')))
+    WebDriverWait(driver, 35, 0.5).until(EC.presence_of_element_located((By.CLASS_NAME, 'uppy-FileInput-input')))
 
     driver.find_element_by_xpath("//button[@class='uppy-FileInput-btn btn btn-primary'][text()='Choose files']")
     e = driver.find_element_by_class_name("uppy-FileInput-input")
@@ -174,8 +177,8 @@ def get_token(username, password,  userId, country, gendor, writeTime, speakTime
     # e.send_keys(Keys.ENTER)
     time.sleep(0.8)
 
-    # e = driver.find_element_by_name("mobileNumber")
-    # e.send_keys('1234567890')
+    e = driver.find_element_by_name("mobileNumber")
+    e.send_keys('1')
     # e.send_keys(Keys.ENTER)
 #5.省份证号
     e = driver.find_element_by_name("idNumber")
@@ -203,7 +206,7 @@ def get_token(username, password,  userId, country, gendor, writeTime, speakTime
     driver.find_element_by_name('acceptIeltsTermsAndConditions').click()
     time.sleep(0.8)
     driver.find_element_by_xpath("//button[@class='btn btn-primary'][text()='Pay Now']").click()
-    WebDriverWait(driver, 15, 0.5).until(EC.presence_of_element_located((By.ID, 'btn-pay-by-paypal')))
+    WebDriverWait(driver, 105, 0.5).until(EC.presence_of_element_located((By.ID, 'btn-pay-by-paypal')))
     payId = driver.current_url
     print(payId)
     return payId[-46:]
@@ -213,7 +216,7 @@ def get_token(username, password,  userId, country, gendor, writeTime, speakTime
 
 
     # driver.close()
-# get_token("intilrx@163.com","Yasi12345678", '345678','123456789012345678','Afghanistan','1','2021-09-15T07:00:00Z','2021-09-13T17:20:00Z')
+# get_token("intilrx@163.com","Yasi12345678", '12345678','Afghanistan','1','2021-09-15T07:00:00Z','2021-09-13T17:20:00Z')
 
 # 获取sessionid
 def get_sessionid(self):
