@@ -9,6 +9,7 @@ from useChrome import get_token
 import datetime
 from check import checkInput
 import threading
+import os
 
 # zb网站获取数据Api
 countryUrl = "https://ieltsindicator.britishcouncil.org/api/availabilities?CountryId="
@@ -191,12 +192,13 @@ def inputId():
 import csv
 def readUserData(ls):
     userList = []
+    if not os.path.exists(ls):
+        print("文件不存在")
+        return
     csv_reader = csv.reader(open(ls))
     for line in csv_reader:
         userList.append(line)
         print(line)
-    
-
     return userList[1:]
 
 # readUserData("./dns1.CSV")
@@ -301,16 +303,19 @@ def choiceStrategyTestTime(userData):
 
 def startTask():
 
-    # userId = input("请输入你的用户名/手机号: ")
+    userId = input("请输入你的用户名/手机号: ")
     
-    # password = input("请输入你的密码: ")
-    # if password != userId[-6:] or len(userId) !=11 :
-    #     print("密码或用户名输入错误")
-    #     return
+    password = input("请输入你的密码: ")
+    if password != userId[-6:] or len(userId) !=11 :
+        print("密码或用户名输入错误")
+        return
     global userls
     userls = readUserData("./dns1.CSV")
-    startTotal = len(userls)
 
+    startTotal = len(userls)
+    if startTotal==0:
+        print("csv文件读取错误")
+        exit(0)
     checkInput(userls)
     text = json.loads(getExamDate(service_numUrl))
     core, status = text["number"], text["status"]
