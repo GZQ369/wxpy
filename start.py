@@ -216,19 +216,19 @@ def tanresChainTime(clonstime):
     return (fd + datetime.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
                 
 allCountryid = getAllcountryId()
-
+allCountryMap  = {v:k for k,v in allCountryid.items()}
+# print(allCountryMap)
+# exit()
 def choiceStrategyTestTime(userData):
     """
     选择考试时间的策略，选第一个时间
     :return:
     """
-    username, password, dateChoice, userId, gender= userData[0],userData[1],userData[3],userData[2],userData[4]
+    username, password, dateChoice, userId, gender, country= userData[0],userData[1],userData[3],userData[2],userData[4], userData[6]
     
     thread_name = threading.current_thread().name
-
     #护照id
     # userId = inputId()
-
     # gender = input("请输入性别(0-女性,1-男性):")
     # if gender != '0' and  gender != '1':
     #     print("输入错误!!!")
@@ -240,10 +240,8 @@ def choiceStrategyTestTime(userData):
     #     return
     # fileList = getFileName(userId[-6:])
     # print("这是即将上传的文件:",fileList)
-
     # username = input("请输入报名账号: ")
     # password = input("请输入报名密码: ")
-
     # dateChoice = input("请输入报名日期(1-31日任一数字日期):")
     # if not dateChoice.isdigit():
     #     return
@@ -251,51 +249,53 @@ def choiceStrategyTestTime(userData):
     # if dateChoice > 31 :
     #     return
     
-
     i=1  #开启第巨轮监测
+
+    key = allCountryMap[country]
     while True:
-        print("开启第{}轮监测...... " .format(i))
-        for key,country in allCountryid.items():
+        print("开启第{}轮监测......{} 正在为护照号为:{}  检查能报名的-{} 国家...{}" .format(i, thread_name, userId,  country,key))
+        i+=1
+
+        # for key,country in allCountryid.items():
             #选着听读写考试时间
-            print("{}正在检查能报名的 {}  国家...{}" .format(thread_name, country,key))
-            module, tests = praseYMDDate(key)
-            if len(tests)==0:
-                time.sleep(0.85)
+        module, tests = praseYMDDate(key)
+        if len(tests)==0:
+            time.sleep(1.05)
+            continue
+        else:
+            closeTime,examID = timeCompare(tests)
+
+            choiceDay = closeTime[8:10]
+            if choiceDay != dateChoice:
+                continue
+            #验证这些时间中可以选折使用的speaking考试时间
+            time.sleep(0.012)
+
+            avaibleTests, avaibleCount = praseHMSDate(examID, module)
+            if avaibleCount==0:
+                time.sleep(0.25)
                 continue
             else:
-                closeTime,examID = timeCompare(tests)
+                SpeakingCloseTime,examID = timeCompare(avaibleTests)
+                print("{}监测到能报名的{}国家，Listening-Reading-Writing 考试时间{}, speaking 考试时间{}".format(thread_name, country,closeTime,SpeakingCloseTime))
+                    
+                closeTime = tanresChainTime(closeTime)
+                SpeakingCloseTime = tanresChainTime(SpeakingCloseTime)
 
-                choiceDay = closeTime[8:10]
-                if choiceDay != dateChoice:
-                    continue
-                #验证这些时间中可以选折使用的speaking考试时间
-                time.sleep(0.012)
+                try:
 
-                avaibleTests, avaibleCount = praseHMSDate(examID, module)
-                if avaibleCount==0:
-                    time.sleep(0.25)
-                    continue
-                else:
-                    SpeakingCloseTime,examID = timeCompare(avaibleTests)
-                    print("{}监测到能报名的{}国家，Listening-Reading-Writing 考试时间{}, speaking 考试时间{}".format(thread_name, country,closeTime,SpeakingCloseTime))
-                        
-                    closeTime = tanresChainTime(closeTime)
-                    SpeakingCloseTime = tanresChainTime(SpeakingCloseTime)
-
-                    try:
-
-                        payid = get_token(username, password, userId, country , gender, closeTime, SpeakingCloseTime)
-                        #通知支付成功
-                        send_notice('yasi_pay', 'bGxjFVZ5WvKoQUBJnP_zsJ', country + "报名成功", userId + "报名成功:" + payid , closeTime+"口语考试时间：" + SpeakingCloseTime + "，倒计时75min报名时间截止，快去付款吧！" )
-                        return
-                    except:
-                        #通知失败
-                        send_notice('yasi_pay', 'bGxjFVZ5WvKoQUBJnP_zsJ', country + "报名失败", userId + "报名失败，请继续观察，正在努力重试······", closeTime+"口语考试时间："+SpeakingCloseTime )
-                        print("{}正在加入重试队列重试{}......".format(thread_name, userData))
-                         #任务失败加入重试队列
-                        userls.append()
-                        # send_notice('yasi', 'bGxjFVZ5WvKoQUBJnP_zsJ', country,closeTime,SpeakingCloseTime )
-                        
+                    payid = get_token(username, password, userId, country , gender, closeTime, SpeakingCloseTime)
+                    #通知支付成功
+                    send_notice('yasi_pay', 'bGxjFVZ5WvKoQUBJnP_zsJ', country + "报名成功", userId + "报名成功:" + payid , closeTime+"口语考试时间：" + SpeakingCloseTime + "，倒计时75min报名时间截止，快去付款吧！" )
+                    return
+                except:
+                    #通知失败
+                    send_notice('yasi_pay', 'bGxjFVZ5WvKoQUBJnP_zsJ', country + "报名失败", userId + "报名失败，请继续观察，正在努力重试······", closeTime+"口语考试时间："+SpeakingCloseTime )
+                    print("{}正在加入重试队列重试{}......".format(thread_name, userData))
+                        #任务失败加入重试队列
+                    userls.append()
+                    # send_notice('yasi', 'bGxjFVZ5WvKoQUBJnP_zsJ', country,closeTime,SpeakingCloseTime )
+                    
         time.sleep(1.28)
         i+=1
 
@@ -310,6 +310,8 @@ def startTask():
         print("密码或用户名输入错误")
         return
     global userls
+
+
     userls = readUserData("./dns1.CSV")
 
     startTotal = len(userls)

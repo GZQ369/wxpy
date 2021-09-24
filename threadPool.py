@@ -11,7 +11,7 @@ def mutilThread(coreNum, runFunc, userDataList):
 
     with ThreadPoolExecutor(coreNum) as executor:
         while userDataList:
-            each = userDataList.pop()
+            each = userDataList.pop(0)
             print("添加入队列:{}" .format(each))
             executor.submit(runFunc,each)
 
