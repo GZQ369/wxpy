@@ -1,11 +1,11 @@
 from __future__ import unicode_literals
 from threading import Timer
-from wxpy import *
+# from wxpy import *
 import re
 import requests
 import datetime as dt
 import random
-bot = Bot(cache_path=True)
+# bot = Bot(cache_path=True)
 # console_qr=True,
 # bot = Bot(console_qr=Ture, cache_path=Ture) #这里的二维码是用像素的形式打印出来！，如果你在win环境上运行，替换为bot=Bot()
 greetList = ['春水初生,春林初盛,春风十里,不如你。',
@@ -422,6 +422,12 @@ lelist=[
  '第九十九封 套路是我学的，但我喜欢你是真的',
  '第一百封 别再到处流浪 别在深夜买醉 别喝陌生人给的酒 也别牵别人的手',
  ]
+
+
+def oneDayMsg():
+
+    print("龚志强:",random.sample(greetList, 1)[0])
+
 def get_news1():
     # 获取金山词霸每日一句，英文和翻译
     url = "http://open.iciba.com/ds_open.php?id=59763&name=%E5%8F%8D%E5%80%92%E6%98%AF&auth=2BD25827B51804754DEC1F44EE5E3C34"
@@ -461,11 +467,12 @@ def send_news(sendfriend,Y,M,D):
         my_friend.send(u"今天消息发送失败了")
         print(u"今天消息发送失败了")
 if __name__ == "__main__":
-    send_news("是珮珮啊",2015,3,15)
-    send_news("不爱吃鱼",2013,6,6)
-    send_news("安生",2013,9,29)
-    send_news("hid",2013,9,29)
-    #send_news("17",2017,11,12)将你一
-    #send_news("愛蘿莉真是太",2017,10,19)
-    send_news("糠糠",2015,11,11)
-    send_news("脉搏",2017,9,15)
+    # send_news("是珮珮啊",2015,3,15)
+    # send_news("不爱吃鱼",2013,6,6)
+    # send_news("安生",2013,9,29)
+    # send_news("hid",2013,9,29)
+    # #send_news("17",2017,11,12)将你一
+    # #send_news("愛蘿莉真是太",2017,10,19)
+    # send_news("糠糠",2015,11,11)
+    # send_news("脉搏",2017,9,15)
+    oneDayMsg()
