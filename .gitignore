@@ -1,3 +1,7 @@
-build/*
+/build
 *.exe
 *.pyc
+template-dns.xlsx
+.vscode
+*.spec
+__pycahce__
