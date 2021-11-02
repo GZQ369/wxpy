@@ -432,7 +432,7 @@ def oneDayMsg():
     {} --{}
     """.format((len(t)-4)* "  ", len(t) * "  ",dt.date.today())
 
-    return  "致琪琪:"+ t + ls
+    return  "致暖晴:"+ t + ls
 
 def get_news1():
     # 获取金山词霸每日一句，英文和翻译
