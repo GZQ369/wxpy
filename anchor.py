@@ -7,7 +7,7 @@ def closeallroot():
 
 
 def closeroot():
-    messagebox.showinfo(title="警告", message="关不掉吧，气不气")
+    messagebox.showinfo(title="警告", message="不喜欢就关不掉，气不气")
     return
 
 

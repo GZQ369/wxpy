@@ -19,6 +19,8 @@ def showMessage():
 	root.resizable(False,False)
 	#添加组件
 	root.title("喜欢我么？")
+	root.iconbitmap('2.ico') #换icon
+
 	frame = Frame(root, relief=RIDGE, borderwidth=3)
 	frame.pack(fill=BOTH, expand=1) #pack() 放置组件若没有则组件不会显示
 	#窗口显示的文字、并设置字体、字号
